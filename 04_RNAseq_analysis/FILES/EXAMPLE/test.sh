@@ -1,0 +1,1 @@
+qsub -S /bin/sh -R y -l h_rt=120:00:00,h_vmem=40G,mem_free=80G -b y /classhome/ngsc017/extdata/STAR_2.4.2a/bin/STAR --genomeDir /classhome/ngsc017/extdata/STAR_INDEX --readFilesIn /classhome/ngsc017/extdata/SRR1039521_subset.fq --runThreadN 12 --outFileNamePrefix /classhome/FILES/EXAMPLE/alignedLog_SRR1039521
