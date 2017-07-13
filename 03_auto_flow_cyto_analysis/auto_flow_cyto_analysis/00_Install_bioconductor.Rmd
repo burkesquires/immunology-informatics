@@ -1,0 +1,24 @@
+# Bioconductor installs
+
+
+source("http://bioconductor.org/biocLite.R")
+
+biocLite ()
+
+biocLite("flowCore")
+biocLite("flowType")
+biocLite("RchyOptimyx")
+
+install.packages("ROCR")
+install.packages("sfsmisc")
+install.packages("GEOmap")
+
+install.packages("car"); install.packages("RFOC")
+
+library(flowCore)
+library(flowDensity)
+library(flowType)
+library(RchyOptimyx);
+library(ROCR)
+library(sfsmisc)
+library(GEOmap)
