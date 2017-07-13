@@ -1,21 +1,37 @@
-# R programming refresher
-# Author: R. Burke Squires, Radina Droumeva
+---
+title: "R programming refresher"
+author: "R. Burke Squires, Radina Droumeva"
+date: "7/11/2017"
+output: ioslides_presentation
+---
+
+LICENSE
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
 
 # First, a short refresher to R
 
 ## Variable Assignment
+```{r}
 x <- 5
 y <- 10
 x + y
+```
 
 # Vectors (one dimensional) and Matrices (two dimensional)
+```{r}
 x <- c(1, 4, 5)
 x
 y <- seq(from = 1, to = 3, by = 1)
 y
 x + y
+```
 
 # Get help on how to construct a matrix
+```{r}
 ?matrix
 A <- matrix(c(1, 2, 3,  11, 12, 13), nrow = 2, ncol = 3, byrow = TRUE)
 A
@@ -24,8 +40,10 @@ A + rbind(x, y)
 A[1, 3]
 A[2, ]
 A[, 1]
+```
 
 # Lists and names
+```{r}
 mylist <- list(`first` = x, `second` = y)
 mylist
 mylist[[1]]
@@ -34,8 +52,10 @@ mylist[[3]]
 length(mylist)
 length(x)
 dim(A)
+```
 
 # More advanced functionality: which, intersect, union
+```{r}
 ?rnorm
 a <- rnorm(20)
 a
@@ -47,11 +67,13 @@ intersect(which(a > 0), which(a < -1))
 combined <- union(which(a > 0), which(a < -1))
 combined
 length(combined)
+```
 
 # Simple plotting
+```{r}
 plot(a, col = "red")
 plot(density(a))
 hist(a)
 plot(density(rnorm(1000)))
-#########################################################
+```
 

@@ -1,6 +1,6 @@
 ---
 title: "Exploring FCM Data In R"
-author: "R. Burke Squires"
+author: "R. Burke Squires, Radina Droumeva"
 date: "7/11/2017"
 output: ioslides_presentation
 ---
