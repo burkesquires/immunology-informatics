@@ -1,12 +1,13 @@
 # Bioconductor installs
 
-source("http://bioconductor.org/biocLite.R")
+source("https://bioconductor.org/biocLite.R")
 
 biocLite ()
 
 biocLite("flowCore")
 biocLite("flowType")
 biocLite("RchyOptimyx")
+biocLite("flowQ")
 
 install.packages("ROCR")
 install.packages("sfsmisc")
@@ -21,3 +22,13 @@ library(RchyOptimyx);
 library(ROCR)
 library(sfsmisc)
 library(GEOmap)
+
+
+# FOR GATING
+
+biocLite('rrcov')
+biocLite('codetools')
+biocLite('foreach')
+biocLite('flowMerge')
+biocLite('flowType')
+biocLite('RchyOptimyx')

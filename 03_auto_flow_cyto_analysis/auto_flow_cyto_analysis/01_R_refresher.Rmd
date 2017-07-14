@@ -15,13 +15,15 @@ knitr::opts_chunk$set(echo = FALSE)
 # First, a short refresher to R
 
 ## Variable Assignment
+
 ```{r}
 x <- 5
 y <- 10
 x + y
 ```
 
-# Vectors (one dimensional) and Matrices (two dimensional)
+## Vectors (one dimensional) and Matrices (two dimensional)
+
 ```{r}
 x <- c(1, 4, 5)
 x
@@ -30,7 +32,8 @@ y
 x + y
 ```
 
-# Get help on how to construct a matrix
+## Get help on how to construct a matrix
+
 ```{r}
 ?matrix
 A <- matrix(c(1, 2, 3,  11, 12, 13), nrow = 2, ncol = 3, byrow = TRUE)
@@ -42,13 +45,14 @@ A[2, ]
 A[, 1]
 ```
 
-# Lists and names
+## Lists and names
+
 ```{r}
 mylist <- list(`first` = x, `second` = y)
 mylist
 mylist[[1]]
 mylist[["first"]]
-mylist[[3]]
+# mylist[[3]]
 length(mylist)
 length(x)
 dim(A)
@@ -57,6 +61,11 @@ dim(A)
 # More advanced functionality: which, intersect, union
 ```{r}
 ?rnorm
+```
+
+## More advanced functionality: which, intersect, union
+
+```{r}
 a <- rnorm(20)
 a
 which(a > 0)
@@ -69,7 +78,8 @@ combined
 length(combined)
 ```
 
-# Simple plotting
+## Simple plotting
+
 ```{r}
 plot(a, col = "red")
 plot(density(a))

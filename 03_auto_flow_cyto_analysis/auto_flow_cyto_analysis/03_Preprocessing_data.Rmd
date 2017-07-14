@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 
 # Start fresh: remove all loaded variables:
+
 ```{r}
 rm(list=ls())
 graphics.off() # close all graphics, for efficiency
@@ -23,25 +24,27 @@ graphics.off() # close all graphics, for efficiency
 
 ```{r}
 library(flowCore)
-setwd('/home/rguru/Documents/Workshop/data')
+setwd('./data')
 ```
 
 # To see a list of files in the 'fullFCS' folder, use dir(), it returns a vector of file names
+
 ```{r}
-files <- dir('fullFCS/')
+files <- dir('./data/fullFCS/')
 files
 ```
 
 # To select the first file in the directory, subset the vector on its first index:
 
 ```{r}
-firstFile <- paste('fullFCS/', files[1], sep = "")
+firstFile <- paste('./data/fullFCS/', files[1], sep = "")
 firstFile
 f <- read.FCS(firstFile)
 f
 ```
 
 ###############################################################
+
 # Compensation:
 
 ```{r}
@@ -56,7 +59,7 @@ f.comp <- compensate(f, M)
 summary(f)
 summary(f.comp)
 # Now the file is compensated. Due to the large size of the files, they have been compensated and truncated to only a few of the colours to facilitate this workshop. They can be loaded:
-load('fs.RData')
+load('./data/fs.RData')
 length(fs)
 fs[[1]]
 ```
@@ -193,7 +196,7 @@ plotDens(f.trans, c(6, 9))
 # (http://jid.oxfordjournals.org/content/201/2/272.full.pdf for gating strategy on this data set)
 ```{r}
 graphics.off()
-load('fs.RData')
+load('./data/fs.RData')
 # We can use a for loop to loop through all samples and apply the same steps. Here is a simple for loop:
 for (i in 1:3){
   print (i^2)  
@@ -205,7 +208,7 @@ for (chan in colnames(fs)[4:ncol(fs[[1]])]){
 
 # Generate a pooled frame to define debris gate:
 ```{r}
-source("../code/supportCode/support_functions.R") # support functions provided by Radina, examine later to see what you can use when you fly home!
+source("./code/supportCode/support_functions.R") # support functions provided by Radina, examine later to see what you can use when you fly home!
 global.frame <- getGlobalFrame(fs)
 plot(global.frame, c("FSC-A", "SSC-A"), ylim = c(0, 1000), smooth=F)
 abline(v = c(35000, 125000), col = "blue", lwd = 2)
@@ -233,7 +236,9 @@ for (i in 1:20){
 ```
 
 # Apply debris gate to whole flow set:
+
 # First, start with a copy of the original flowSet 'fs' (normally you will work directly with 'fs' itself)
+
 ```{r}
 clean.fs <- fs
 for (i in 1:20){ # Loop over the length of the flowSet
@@ -250,6 +255,7 @@ for (i in 1:20){ # Loop over the length of the flowSet
 ```
 
 # See the results:
+
 ```{r}
 par(mfrow = c(5,4), mar = c(2,2,1,1), mgp=c(2, 1, 0))
 for (i in 1:20){
@@ -258,10 +264,13 @@ for (i in 1:20){
 ```
 
 # Create a new pooled sample to estimate parameters for logicle transform:
+
 ```{r}
 global.frame <- getGlobalFrame(clean.fs)
 lgcl <- estimateLogicle(global.frame, colnames(fs)[3:9])
 ```
+
+## Apply the transformation to each sample in a for loop similarly to above.
 
 # Apply the transformation to each sample in a for loop similarly to above.
 # Note that if your transformation looks bad, you will have to change it:

@@ -12,8 +12,6 @@ LICENSE
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-
-
 # Clear current workspace, close plots, load libraries
 
 ```{r}
@@ -42,16 +40,18 @@ dump <- "V450-A"
 # First create a pooled flowFrame:
 
 ```{r}
-source("../code/supportCode/support_functions.R")
+source("./code/supportCode/support_functions.R")
 pooled.frame <- getGlobalFrame(trans.fs)
-plotDens(pooled.frame, c(cd3, dump))
+{plotDens(pooled.frame, c(cd3, dump))
+  abline(v = 1, lwd=2, col = "blue")
+  abline(h = 1.5, lwd=2, col="blue")}
 ```
 
 # By looking at this, it looks like CD3 = 1 and Dump Channel = 1.5 are good gates
 
 ```{r}
-abline(v = 1, lwd=2, col = "blue")
-abline(h = 1.5, lwd=2, col="blue")
+# abline(v = 1, lwd=2, col = "blue")
+# abline(h = 1.5, lwd=2, col="blue")
 ```
 
 # Let's verify by plotting whole flowSet:
@@ -65,12 +65,15 @@ for (i in 1:length(trans.fs)){
 }
 ```
 
-# Looks pretty good. Now let's isolate the viable cells into a new flowSet:
+# Looks pretty good. Now let's isolate the viable cells into a new flowSet
+
 ```{r}
 viable.fs <- trans.fs
 ```
 
-# This time, instead of a for loop, let's use 'fsApply'. It applies a single function to each flowFrame object. So, we must first write our very own function! To do this, we must imagine we are only working with a single flowFrame and write the algorithm to isolate the viable cells for it:
+## Use fsApply
+
+This time, instead of a for loop, let's use 'fsApply'. It applies a single function to each flowFrame object. So, we must first write our very own function! To do this, we must imagine we are only working with a single flowFrame and write the algorithm to isolate the viable cells for it:
 
 ```{r}
 # Code for single flowFrame:
@@ -81,7 +84,8 @@ combined <- intersect(cd3pos.indices, dumpneg.indices)
 viable.f <- f[combined]
 ```
 
-# Is this right? Let's check:
+# Is this right? Let's check
+
 ```{r}
 graphics.off()
 plot(exprs(f)[, c(cd3, dump)], pch=".")
@@ -89,6 +93,7 @@ points(exprs(viable.f)[, c(cd3, dump)], pch=".", col = "green4")
 ```
 
 # See ?chull for an idea of how to plot a gate using lines instead of just a different colour: run the example in the helpf file!
+
 ```{r}
 plotDens(f, c(cd3, dump))
 X <- exprs(viable.f)[, c(cd3, dump)]
@@ -97,9 +102,14 @@ gate.pts <- c(gate.pts, gate.pts[1]) # Connect the first and last point to make 
 lines(X[gate.pts, ], lwd=2, col="blue", lty="dashed")
 ```
 
-# This is how you create your own function in R:
-# 1) Give it a name of your choice, make sure it is uncommon enough that it won't accidentally interfere with existing R functions! I.e. don't create a function called "read.FCS" or "plot" or "which"!
-# 2) inside the 'function(*)' put a variable name which will be only used within the function. I chose 'f', but you can call it 'x' and replace all the 'f's inside the function with 'x's.
+## Functions
+
+This is how you create your own function in R:
+
+1) Give it a name of your choice, make sure it is uncommon enough that it won't accidentally interfere with existing R functions! I.e. don't create a function called "read.FCS" or "plot" or "which"!
+
+2) inside the 'function(*)' put a variable name which will be only used within the function. I chose 'f', but you can call it 'x' and replace all the 'f's inside the function with 'x's.
+
 ```{r}
 getViableFrame <- function(f){ 
   # Manipulate the input 'f':
@@ -112,7 +122,10 @@ getViableFrame <- function(f){
 }
 ```
 
-# Execute the function definition to enable it for use. Now try it:
+## Execute the function
+
+Execute the function definition to enable it for use. Now try it:
+
 ```{r}
 viable.f <- getViableFrame(f)
 # Is this right? Let's check (again):
@@ -122,19 +135,26 @@ points(exprs(viable.f)[, c(cd3, dump)], pch=".", col = "green4")
 ```
 
 # Now we can use fsApply:
+
 ```{r}
 viable.fs <- fsApply(trans.fs, getViableFrame)
 ```
 
 # Let's look at the proportions of live cells:
+
 ```{r}
 live.counts <- fsApply(viable.fs, nrow)/fsApply(trans.fs, nrow)
 plot(density(live.counts), main = "Proportion CD3+ viable cells")
 ```
 
-# It kind of looks like two peaks in the density. Can we do anything interesting just with this information?
-# Let's extract the clinical information we have first.
-# For this workshop, I have selected 20 FCS files for patients which have an event reported -- either death or progression to AIDS. We have the number of days before the event occured. Infact, that information is stored inside the FCS keywords!
+## Twin Peaks?
+
+It kind of looks like two peaks in the density. Can we do anything interesting just with this information?
+
+Let's extract the clinical information we have first.
+
+For this workshop, I have selected 20 FCS files for patients which have an event reported -- either death or progression to AIDS. We have the number of days before the event occured. Infact, that information is stored inside the FCS keywords!
+
 ```{r}
 survival <- fsApply(viable.fs, function(x) x@description$`CD Survival time from seroconversion`)
 # Let's convert this to numbers so we can work with them:
@@ -143,7 +163,8 @@ survival
 plot(survival, live.counts, pch = 19)
 ```
 
-# Try kmeans:
+## Try kmeans:
+
 ```{r}
 km <- kmeans(live.counts, 2)
 plot(survival, live.counts, pch = 19, col = km$cluster, main = "K-means misclassifies 3 samples from each group.")
@@ -151,36 +172,44 @@ plot(survival, live.counts, pch = 19, col = km$cluster, main = "K-means misclass
 # For a really good explanation of k-means and hierarchical clustering, see Andrew Moore's slides: http://www.autonlab.org/tutorials/kmeans11.pdf
 ```
 
-#######################################################
-# So far we have preprocessed our data and have now isolated the live CD3+ cells.
-# Let's now consider automated gating for the remainder of the analysis.
-# Consider CD4 first:
+## Automated Gating
+
+So far we have preprocessed our data and have now isolated the live CD3+ cells.
+
+Let's now consider automated gating for the remainder of the analysis.
+
+Consider CD4 first:
+
 ```{r}
 cd4 <- "V655-A"
 pooled.frame <- getGlobalFrame(viable.fs)
 par(mfrow = c(1, 2), mar = c(3, 3, 2, 1), mgp=c(2, 1, 0))
-plotDens(pooled.frame, c(cd3, cd4))
+{plotDens(pooled.frame, c(cd3, cd4))
+abline(h = cd4.gate, lwd=2, col="blue")}
 ```
 
-# Try flowDensity -- the function 'deGate':
+## Try flowDensity -- the function 'deGate'
+
 ```{r}
 cd4.gate <- deGate(pooled.frame, cd4)
-abline(h = cd4.gate, lwd=2, col="blue")
 ```
 
-# Looks good, how did it do it?
+## Looks good, how did it do it?
+
 ```{r}
-deGate(pooled.frame, cd4, graphs=TRUE)
+deGate(pooled.frame, cd4, graphs=TRUE)wssss
 ```
 
-# Try for every channel (except scatter, CD3 and the dump channel):
+## Try for every channel (except scatter, CD3 and the dump channel):
+
 ```{r}
 ki67 <- "B515-A"
 cd8 <- "V800-A"
 cd127 <- "G560-A"
 ```
 
-#  This time we will record the gates for all channels into a vector
+##  This time we will record the gates for all channels into a vector
+
 ```{r}
 store.gates <- rep(-Inf, 4)
 names(store.gates) <- c(cd4, cd8, cd127, ki67) 
@@ -195,24 +224,31 @@ store.gates
 ```
 
 # All looks good except for CD127. Let's work on it:
+
 ```{r}
 par(mfrow = c(5, 4), mar = c(3, 3, 1,1), mgp=c(2, 1, 0))
 for (i in 1:length(viable.fs)){
   plotDens(viable.fs[[i]], c("SSC-A", cd127)) 
 }
 ```
-# Still not obvious. This is where a control would be necessary! Let's ignore CD127 from now on.
 
 
-# Let's at least make sure CD4, CD8 and KI67 work for all samples:
+Still not obvious. This is where a control would be necessary! Let's ignore CD127 from now on.
+
+Let's at least make sure CD4, CD8 and KI67 work for all samples:
+
+
 ```{r}
 par(mfrow=c(5,4), mar = c(3, 2, 2, 1), mgp=c(2, 1, 0))
+
 for (i in 1:20){
   plotDens(viable.fs[[i]], c(cd4, cd8))
   abline(v = store.gates[cd4], lwd=2, col="blue")
   abline(h = store.gates[cd8], lwd=2, col="blue")
 }
+
 par(mfrow=c(5,4), mar = c(3, 2, 2, 1), mgp=c(2, 1, 0))
+
 for (i in 1:20){
   plotDens(viable.fs[[i]], c(cd8, ki67))
   abline(v = store.gates[cd8], lwd=2, col="blue")
@@ -220,9 +256,13 @@ for (i in 1:20){
 }
 ```
 
-# Looks pretty good. Now what? flowType!
-# If you don't have flowType, i.e. if library(flowType) doesn't work):
-# (Ideally you can run this during lunch)
+
+Looks pretty good. Now what? flowType!
+
+If you don't have flowType, i.e. if library(flowType) doesn't work):
+
+(Ideally you can run this during lunch)
+
 #source("http://bioconductor.org/biocLite.R")
 #biocLite('rrcov')
 #biocLite('codetools')
@@ -247,7 +287,10 @@ colnames(viable.fs) <- c("FSC-A", "FSC-H", "SSC-A", "KI67", "CD3", "CD8", "CD4",
 # Methods are the gate threshold values in the same order as above.
 # MarkerNames is the full vector of all channel names.
 ```{r}
-ft1 <- flowType(Frame = viable.fs[[1]], PropMarkers=c(7, 6, 4), Methods=store.gates[c(cd4, cd8, ki67)], MarkerNames=colnames(viable.fs))
+ft1 <- flowType(Frame = viable.fs[[1]], 
+                PropMarkers=c(7, 6, 4), 
+                Methods='kmeans', 
+                MarkerNames=colnames(viable.fs))
 ```
 # Examine ft1 -- see what's in there.
 # In the console below type f1@ and then press your tab key to see available components to explore!
@@ -256,7 +299,11 @@ ft1 <- flowType(Frame = viable.fs[[1]], PropMarkers=c(7, 6, 4), Methods=store.ga
 # Next, use fsApply to compute all phenotypes for thew hole flow set.
 # Notice that we have our own function defined within the fsApply call -- you can do this if your function is so short, that you don't need to define it separately. Also notice the '/nrow(x)' part -- this is so that instead of cell counts we get cell proportions. We cannot use cell counts because the total number of starting cells is different for the different samples.
 ```{r}
-ft <- fsApply(viable.fs, function(x) flowType(x, PropMarkers=c(7, 6, 4), Methods=store.gates[c(cd4, cd8, ki67)], MarkerNames=colnames(viable.fs))@CellFreqs/nrow(x))
+ft <- fsApply(viable.fs, 
+              function(x) flowType(x,
+                                   PropMarkers=c(7, 6, 4), 
+                                   Methods='kmeans', 
+                                   MarkerNames=colnames(viable.fs))@CellFreqs/nrow(x))
 rownames(ft) <- sampleNames(viable.fs)
 ```
 
