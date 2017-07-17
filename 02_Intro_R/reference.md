@@ -38,7 +38,7 @@
 
 - To access help for a function type `?function_name` or `help(function_name)`
 - Use quotes for special operators e.g. `?"+"`
-- Use fuzzy search if you can't remember a name '??search_term'
+- Use fuzzy search if you can't remember a name `??search_term`
 - [CRAN task views](http://cran.at.r-project.org/web/views) are a good starting point.
 - [Stack Overflow](http://stackoverflow.com/) is a good place to get help with your code.
     - `dput` will dump data you are working from so others can load it easily.
@@ -124,8 +124,8 @@ behaviour of R).
 
  - `read.csv` to read in data in a regular structure
    - `sep` argument to specify the separator
-     - "," for comma separated
-     - "\t" for tab separated
+     - `","` for comma separated
+     - `"\t"` for tab separated
    - Other arguments:
      - `header=TRUE` if there is a header row
 
