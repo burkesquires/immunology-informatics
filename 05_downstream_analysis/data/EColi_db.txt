@@ -1,0 +1,2 @@
+seg.name	seg.Start	seg.End	the.v	NO
+1	1	4621656	NA	NA
