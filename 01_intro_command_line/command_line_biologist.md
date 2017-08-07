@@ -1,6 +1,7 @@
 # Introduction to the Command Line for Biologists
 
 ## a.k.a An introduction to UNIX / Linux / GNU / Shell
+
 ---
 
 This work created by [R. Burke Squires](https://github.com/burkesquires) and adapted from [Konrad Förstner](https://github.com/konrad) and [Chaochih Liu](https://github.com/liux1299/Linux-NGS_Tutorial) 
