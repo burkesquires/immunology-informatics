@@ -81,8 +81,7 @@ Individual values in R must be one of 5 **data types**, multiple values can be g
   - `array` multi-dimensional objects that can only contain one type of data
 
  Remember that matrices are really atomic vectors underneath the hood, and that
-data.frames are really lists underneath the hood (this explains some of the weirder
-behaviour of R).
+data.frames are really lists underneath the hood (this explains some of the weirder behaviour of R).
 
  **Vectors**
  - `vector` All items in a vector must be the same type.
