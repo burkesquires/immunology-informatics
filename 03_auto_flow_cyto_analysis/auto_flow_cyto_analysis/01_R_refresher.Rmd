@@ -1,20 +1,33 @@
 ---
-title: "R programming refresher"
-author: "R. Burke Squires, Radina Droumeva"
+title: "R Programming Refresher"
+author: "R. Burke Squires (adapted from Radina Droumeva)"
 date: "7/11/2017"
-output: ioslides_presentation
+output:
+  html_notebook:
+    toc: yes
+  pdf_document:
+    highlights: tango
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
 ---
 
-LICENSE
+# An Introduction to R Noebooks
+
+Introductory material about R Notebooks:
+
+- https://blog.rstudio.com/2016/10/05/r-notebooks/
+- http://rmarkdown.rstudio.com/r_notebooks.html
+- https://rviews.rstudio.com/2017/03/15/why-i-love-r-notebooks/
 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-# First, a short refresher to R
+## First, a short refresher to R
 
-## Variable Assignment
+Variable Assignment
 
 ```{r}
 x <- 5
@@ -59,6 +72,9 @@ dim(A)
 ```
 
 # More advanced functionality: which, intersect, union
+
+## Get help for the _rnorm_ function
+
 ```{r}
 ?rnorm
 ```
@@ -87,3 +103,8 @@ hist(a)
 plot(density(rnorm(1000)))
 ```
 
+## Render the notebook as html
+
+```{r}
+rmarkdown::render(html_notebook)
+```

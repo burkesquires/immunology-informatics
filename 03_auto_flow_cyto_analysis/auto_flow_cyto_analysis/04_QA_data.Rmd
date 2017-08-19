@@ -1,12 +1,18 @@
 ---
 title: "QA FCM data in R"
-author: "R. Burke Squires, Radina Droumeva"
+author: "R. Burke Squires (adapted from Radina Droumeva)"
 date: "7/11/2017"
-output: ioslides_presentation
+output:
+  html_notebook:
+    toc: yes
+  pdf_document:
+    highlights: tango
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
 ---
 
-QA FCM data in R
-================
+# QA FCM data in R
 
 
 ```{r setup, include=FALSE}
@@ -16,7 +22,12 @@ opts_knit$set(root.dir = "./") #~/gits/project/")
 ```
 
 
-# Start fresh: remove all loaded variables:
+## Make sure R knows which directory our data will be read from
+
+```{r}
+getwd()
+setwd('./data')
+```
 
 ```{r}
 rm(list=ls())
@@ -27,7 +38,6 @@ Ensure flowCore library is loaded:
 
 ```{r}
 library(flowCore)
-#setwd('./data')
 ```
 
 To see a list of files in the 'fullFCS' folder, use dir(), it returns a vector of file names
@@ -66,8 +76,7 @@ source("./code/supportCode/qaProcess.GenericNumber.R")
 save.dir <- "./data/QA/"
 ```
 
-This removes the current contents of the QA folder. Do this for space efficiency and to ensure correct results:
-(You may get an error the first time, as there is no "QA" folder yet. If later you set this up on your own computer and don't use Ubuntu OS, you can just delete the folder yourself in the file browser)
+This removes the current contents of the QA folder. Do this for space efficiency and to ensure correct results: (You may get an error the first time, as there is no "QA" folder yet. If later you set this up on your own computer and don't use Ubuntu OS, you can just delete the folder yourself in the file browser)
 
 ```{r}
 system(paste('rm -r ', save.dir, "*", collapse="", sep=""))

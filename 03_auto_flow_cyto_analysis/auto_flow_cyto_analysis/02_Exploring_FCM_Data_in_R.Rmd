@@ -1,8 +1,17 @@
 ---
 title: "Exploring FCM Data In R"
-author: "R. Burke Squires, Radina Droumeva"
+author: "R. Burke Squires (adapted from Radina Droumeva)"
 date: "7/11/2017"
-output: ioslides_presentation
+output:
+  html_document:
+    toc: yes
+  html_notebook:
+    toc: yes
+  pdf_document:
+    highlights: tango
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
 ---
 
 LICENSE
@@ -12,22 +21,12 @@ LICENSE
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## R Markdown
-
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
-
-
-#########################################################
-
 # Flow Cytometry data
 
 ## Look at the help files to search for a function:
 
 ```{r}
 ?read.FCS
-??read.FCS
 ```
 
 
@@ -54,16 +53,27 @@ f
 # 'f' is a flowFrame object. See ?flowFrame for details and to see what you can do with it
 ```
 
-## Slide
+## Get some information about the FCS file
+
+How many events the file has
 
 ```{r}
-# how many events the file has
 nrow(f)
-# the channel names:
+```
+
+The channel names:
+
+```{r}
 colnames(f)
-# Extract the expression values into a matrix
+```
+
+Extract the expression values into a matrix
+
+```{r}
 E <- exprs(f)
 ```
+
+What are teh dimentions of the data?
 
 ```{r}
 dim(E)
@@ -81,9 +91,21 @@ E[1:10, ]
 
 ```{r}
 f@description
+```
+
+```{r}
 names(f@description)
+```
+
+```{r}
 f@description$`TUBE NAME`
+```
+
+```{r}
 f@parameters@data
+```
+
+```{r}
 f@parameters@data[1, c("minRange", "maxRange")]
 ```
 
@@ -94,8 +116,14 @@ It says that you have to first load the 'flowViz' library before you can plot FC
 
 ```{r}
 plot(f, c("FSC-A", "SSC-A"))
+```
+
+```{r}
 library(flowViz)
 plot(f, c("FSC-A", "SSC-A"), ylim = c(0, 5000), smooth=FALSE)
+```
+
+```{r}
 # Note SSC-A is the third parameter (P3) and the meta data tells us it is to be viewed on a LOG scale:
 colnames(f)[3] # See that this is SSC-A
 f@description$`P3DISPLAY`
@@ -131,6 +159,9 @@ fsApply(fs, function(f) f@description$`TUBE NAME`)
 ```{r}
 ### Plotting excercise ###################################################
 plot(fs[[2]], c("FSC-A", "SSC-A"), ylim = c(0, 5000), smooth = FALSE)
+```
+
+```{r}
 # Plot the density of the forward scatter area values for the first sample:
 E <- exprs(fs[[1]])
 fscValues <- E[, "FSC-A"]

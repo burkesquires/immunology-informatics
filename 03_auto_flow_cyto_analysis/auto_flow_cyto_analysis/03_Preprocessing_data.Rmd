@@ -1,8 +1,17 @@
 ---
 title: "Preprocessing FCM data in R"
-author: "R. Burke Squires, Radina Droumeva"
+author: "R. Burke Squires (adapted from Radina Droumeva)"
 date: "7/11/2017"
-output: ioslides_presentation
+output:
+  html_document:
+    toc: yes
+  html_notebook:
+    toc: yes
+  pdf_document:
+    highlights: tango
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
 ---
 
 LICENSE
@@ -13,7 +22,18 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 
+
+## Make sure R knows which directory our data will be read from
+
+```{r}
+getwd()
+setwd('./data')
+dir()
+dir('fullFCS/')
+```
+
 # Start fresh: remove all loaded variables:
+
 
 ```{r}
 rm(list=ls())
