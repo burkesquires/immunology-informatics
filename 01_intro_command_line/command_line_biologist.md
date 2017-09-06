@@ -47,16 +47,7 @@ examples files.
 
 # Motivation and background
 
-In this course you will learn the basics of how to use the Unix
-shell. Unix is a class of operating systems with many different
-flavors including well-known ones like GNU/Linux (Ubuntu, RedHat) and the BSDs. The
-development of Unix and its shell (also known as **command line**
-interface) dates back to the late 1960s. Still, their concepts lead to
-very powerful tools. In the command line you can easily combine
-different tools into pipelines, avoid repetitive work and make your
-workflow reproducible. Knowing how to use the shell will also enable
-you to run programs that are only developed for this environment which
-is the case for many bioinformatics tools.
+In this course you will learn the basics of how to use the Unix shell. Unix is a class of operating systems with many different flavors including well-known ones like GNU/Linux (Ubuntu, RedHat) and the BSDs. The development of Unix and its shell (also known as **command line** interface) dates back to the late 1960s. Still, their concepts lead to very powerful tools. In the command line you can easily combine different tools into pipelines, avoid repetitive work and make your workflow reproducible. Knowing how to use the shell will also enable you to run programs that are only developed for this environment which is the case for many bioinformatics tools.
 
 ---
 
